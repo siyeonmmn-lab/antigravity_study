@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고려대학교 대동제 티켓팅</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #A71930;
+            --crimson-dark: #7a1223;
+            --crimson-light: #c92a46;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --success: #2e7d32;
+            --success-light: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-100);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--crimson);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(167, 25, 48, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .section {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Style */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255,255,255,0.4);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--gray-900);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        p.subtitle {
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        /* Landing Page */
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .time-box {
+            background: var(--gray-900);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 12px;
+            min-width: 80px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .time-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            color: var(--gray-300);
+            margin-top: 0.2rem;
+        }
+
+        button {
+            background: var(--crimson);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(167, 25, 48, 0.3);
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--crimson-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(167, 25, 48, 0.4);
+        }
+
+        button:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            box-shadow: none;
+            color: var(--gray-600);
+            transform: none;
+        }
+
+        /* Login Page */
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: var(--gray-100);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--crimson);
+            box-shadow: 0 0 0 3px rgba(167, 25, 48, 0.1);
+            background: var(--white);
+        }
+
+        /* Zone Selection */
+        .stage {
+            background: var(--gray-800);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .zones-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .zone-btn {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            color: var(--gray-800);
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .zone-btn:hover {
+            border-color: var(--crimson);
+            color: var(--crimson);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(167, 25, 48, 0.1);
+        }
+
+        .zone-btn span {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--gray-600);
+        }
+
+        /* Seat Selection */
+        .seats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .legend {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .seats-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .seat {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: transparent;
+        }
+
+        .seat:hover:not(.booked) {
+            transform: scale(1.1);
+        }
+
+        .seat.available {
+            background-color: var(--success);
+            border: 1px solid var(--success-light);
+            box-shadow: inset 0 2px 0 rgba(255,255,255,0.2);
+        }
+        
+        .seat.booked {
+            background-color: var(--crimson);
+            border: 1px solid var(--crimson-dark);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .seat.selected {
+            background-color: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            color: var(--white);
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .seat-info {
+            min-height: 24px;
+            font-weight: 500;
+            color: var(--crimson);
+            margin-bottom: 1rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-600);
+            box-shadow: none;
+            margin-top: 1rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+            color: var(--gray-800);
+            box-shadow: none;
+        }
+
+        /* Ticket Result */
+        .ticket-wrapper {
+            background: linear-gradient(135deg, var(--crimson), #5c0d19);
+            padding: 2px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(167, 25, 48, 0.3);
+        }
+
+        .ticket-inner {
+            background: var(--white);
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticket-header {
+            background: var(--gray-100);
+            padding: 2rem;
+            border-bottom: 2px dashed var(--gray-300);
+            position: relative;
+        }
+
+        .ticket-header::before, .ticket-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            width: 20px;
+            height: 20px;
+            background: var(--crimson); /* Match parent wrapper background visually */
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .ticket-header::before { left: -10px; }
+        .ticket-header::after { right: -10px; }
+
+        .ticket-body {
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+            padding-bottom: 1rem;
+        }
+
+        .ticket-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .ticket-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .ticket-value {
+            font-weight: 700;
+            color: var(--gray-900);
+            font-size: 1.1rem;
+        }
+
+        .ticket-number {
+            font-family: monospace;
+            font-size: 1.3rem;
+            color: var(--crimson);
+            letter-spacing: 2px;
+        }
+
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--gray-900);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">KU TICKET</div>
+        <div class="user-info" id="headerUserInfo" style="display: none; font-size: 0.9rem;"></div>
+    </header>
+
+    <main>
+        <!-- 1. Landing / Countdown Page -->
+        <section id="landingPage" class="section active card">
+            <h1 style="color: var(--crimson);">2026 고려대학교 대동제</h1>
+            <p class="subtitle">민주광장 좌석 예매 시스템</p>
+            
+            <div style="margin-top: 3rem;">
+                <p style="font-weight: 500; color: var(--gray-800);">티켓팅 오픈까지 남은 시간</p>
+                <div class="timer-container">
+                    <div class="time-box">
+                        <span class="time-value" id="days">00</span>
+                        <span class="time-label">DAYS</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="hours">00</span>
+                        <span class="time-label">HOURS</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="minutes">00</span>
+                        <span class="time-label">MINS</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-value" id="seconds">05</span>
+                        <span class="time-label">SECS</span>
+                    </div>
+                </div>
+            </div>
+
+            <button id="startBtn" disabled>티켓팅 오픈 대기중...</button>
+        </section>
+
+        <!-- 2. Login Page -->
+        <section id="loginPage" class="section card">
+            <h1>재학생 인증</h1>
+            <p class="subtitle">KUPID 아이디 연동 기반 인증 (시뮬레이션)</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label for="studentId">학번 (10자리)</label>
+                    <input type="text" id="studentId" placeholder="예: 2026130576" pattern="[0-9]{10}" required maxlength="10">
+                </div>
+                <div class="input-group">
+                    <label for="studentName">성명</label>
+                    <input type="text" id="studentName" placeholder="예: 유시연" required>
+                </div>
+                <button type="submit" style="margin-top: 1rem;">인증 및 로그인</button>
+            </form>
+        </section>
+
+        <!-- 3. Dashboard / Zone Selection -->
+        <section id="dashboardPage" class="section card" style="max-width: 700px;">
+            <h1>구역 선택</h1>
+            <p class="subtitle">원하시는 좌석 구역을 선택해 주세요.</p>
+
+            <div class="stage">STAGE</div>
+            <div class="zones-grid">
+                <button class="zone-btn" onclick="selectZone('A')">A 구역<span id="zoneA-status">잔여 확인중...</span></button>
+                <button class="zone-btn" onclick="selectZone('B')">B 구역<span id="zoneB-status">잔여 확인중...</span></button>
+                <button class="zone-btn" onclick="selectZone('C')">C 구역<span id="zoneC-status">잔여 확인중...</span></button>
+                <button class="zone-btn" onclick="selectZone('D')">D 구역<span id="zoneD-status">잔여 확인중...</span></button>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--gray-600);"><i class="fas fa-info-circle"></i> 새로고침 시 잔여 좌석이 실시간으로 변동됩니다.</p>
+        </section>
+
+        <!-- 4. Seat Selection Page -->
+        <section id="seatPage" class="section card" style="max-width: 800px;">
+            <h1 id="selectedZoneTitle">A 구역 좌석 선택</h1>
+            
+            <div class="seats-header">
+                <div class="stage" style="margin-bottom: 0; padding: 0.8rem 2rem; border-radius: 8px;">STAGE 방향</div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--success);"></div> 선택 가능
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--crimson);"></div> 예약 완료
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--gray-900);"></div> 내 선택
+                    </div>
+                </div>
+            </div>
+
+            <div class="seats-grid" id="seatsGrid">
+                <!-- Seats will be generated by JS -->
+            </div>
+
+            <div class="seat-info" id="seatSelectionInfo">좌석을 선택해 주세요.</div>
+            
+            <button id="reserveBtn" disabled onclick="confirmReservation()">예약하기</button>
+            <button class="btn-outline" onclick="showSection('dashboardPage')">구역 다시 선택하기</button>
+        </section>
+
+        <!-- 5. Ticket Result Page -->
+        <section id="ticketPage" class="section" style="max-width: 450px;">
+            <div class="ticket-wrapper">
+                <div class="ticket-inner">
+                    <div class="ticket-header">
+                        <h2 style="color: var(--crimson); font-size: 1.5rem; margin-bottom: 0.5rem;">예약 완료</h2>
+                        <p style="color: var(--gray-600); font-size: 0.9rem;">고려대학교 대동제 예매가 확정되었습니다.</p>
+                    </div>
+                    <div class="ticket-body">
+                        <div class="ticket-row">
+                            <span class="ticket-label">예매 번호</span>
+                            <span class="ticket-value ticket-number" id="receiptTicketNum">KU-2026-XXXX</span>
+                        </div>
+                        <div class="ticket-row">
+                            <span class="ticket-label">학번</span>
+                            <span class="ticket-value" id="receiptStudentId">2026130576</span>
+                        </div>
+                        <div class="ticket-row">
+                            <span class="ticket-label">성명</span>
+                            <span class="ticket-value" id="receiptName">유시연</span>
+                        </div>
+                        <div class="ticket-row">
+                            <span class="ticket-label">좌석 정보</span>
+                            <span class="ticket-value" style="color: var(--crimson);" id="receiptSeat">A구역 12번</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button style="margin-top: 2rem;" onclick="location.reload()">처음으로 돌아가기</button>
+        </section>
+
+    </main>
+
+    <div id="toast">메시지</div>
+
+    <script>
+        // --- State Management ---
+        const state = {
+            studentId: '',
+            name: '',
+            currentZone: '',
+            selectedSeat: null,
+            totalSeatsPerZone: 50,
+            bookedDB: JSON.parse(localStorage.getItem('kuTicketDB')) || {} 
+            // { '2026130576': { ticketNum: 'KU...', zone: 'A', seat: 12 } }
+        };
+
+        // --- Utility: Show Toast ---
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        // --- Utility: Switch Sections ---
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // --- 1. Countdown Timer ---
+        let countdownValue = 5; // Start button enables after 5 seconds for simulation
+        const timerInterval = setInterval(() => {
+            countdownValue--;
+            document.getElementById('seconds').innerText = countdownValue.toString().padStart(2, '0');
+            
+            if (countdownValue <= 0) {
+                clearInterval(timerInterval);
+                const btn = document.getElementById('startBtn');
+                btn.disabled = false;
+                btn.innerText = "티켓팅 시작하기";
+                btn.onclick = () => showSection('loginPage');
+            }
+        }, 1000);
+
+        // --- 2. Login Logic ---
+        function handleLogin(e) {
+            e.preventDefault();
+            const sid = document.getElementById('studentId').value.trim();
+            const sname = document.getElementById('studentName').value.trim();
+
+            if(sid.length !== 10) {
+                showToast("학번 10자리를 정확히 입력해주세요.");
+                return;
+            }
+
+            // Check duplicate login/booking
+            if (state.bookedDB[sid]) {
+                showToast("이미 티켓을 예약한 학번입니다.");
+                return;
+            }
+
+            state.studentId = sid;
+            state.name = sname;
+            
+            document.getElementById('headerUserInfo').style.display = 'block';
+            document.getElementById('headerUserInfo').innerText = `${sname} (${sid})`;
+
+            showToast("인증에 성공했습니다.");
+            
+            // Randomize zone seat availability for dashboard
+            updateDashboardStatus();
+            setTimeout(() => showSection('dashboardPage'), 500);
+        }
+
+        // --- 3. Dashboard Logic ---
+        function updateDashboardStatus() {
+            ['A', 'B', 'C', 'D'].forEach(zone => {
+                // Simulate 10~40 random available seats out of 50
+                const available = Math.floor(Math.random() * 30) + 10;
+                document.getElementById(`zone${zone}-status`).innerText = `잔여 ${available}석`;
+            });
+        }
+
+        function selectZone(zone) {
+            state.currentZone = zone;
+            state.selectedSeat = null;
+            document.getElementById('selectedZoneTitle').innerText = `${zone} 구역 좌석 선택`;
+            document.getElementById('seatSelectionInfo').innerText = `좌석을 선택해 주세요.`;
+            document.getElementById('reserveBtn').disabled = true;
+            
+            renderSeats();
+            showSection('seatPage');
+        }
+
+        // --- 4. Seat Selection Logic ---
+        function renderSeats() {
+            const grid = document.getElementById('seatsGrid');
+            grid.innerHTML = '';
+            
+            for(let i = 1; i <= state.totalSeatsPerZone; i++) {
+                const seatDiv = document.createElement('div');
+                seatDiv.classList.add('seat');
+                seatDiv.innerText = i;
+                
+                // Randomly book seats (roughly 40% booked) to simulate real-time
+                const isBooked = Math.random() < 0.4;
+                
+                if(isBooked) {
+                    seatDiv.classList.add('booked');
+                    seatDiv.onclick = () => showToast("이미 선택된 좌석입니다.");
+                } else {
+                    seatDiv.classList.add('available');
+                    seatDiv.onclick = () => handleSeatClick(seatDiv, i);
+                }
+
+                grid.appendChild(seatDiv);
+            }
+        }
+
+        function handleSeatClick(element, seatNumber) {
+            // Remove previous selection
+            document.querySelectorAll('.seat.selected').forEach(el => el.classList.remove('selected'));
+            
+            // Set new selection
+            element.classList.add('selected');
+            state.selectedSeat = seatNumber;
+            
+            document.getElementById('seatSelectionInfo').innerText = `선택한 좌석: ${state.currentZone}구역 - ${seatNumber}번`;
+            document.getElementById('reserveBtn').disabled = false;
+        }
+
+        // --- 5. Reservation Logic ---
+        function confirmReservation() {
+            if(!state.selectedSeat) return;
+
+            // Generate Ticket Number
+            const randomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+            const ticketNum = `KU-2026-${randomCode}`;
+
+            // Save to DB
+            state.bookedDB[state.studentId] = {
+                ticketNum: ticketNum,
+                zone: state.currentZone,
+                seat: state.selectedSeat,
+                name: state.name
+            };
+            localStorage.setItem('kuTicketDB', JSON.stringify(state.bookedDB));
+
+            // Render Receipt
+            document.getElementById('receiptTicketNum').innerText = ticketNum;
+            document.getElementById('receiptStudentId').innerText = state.studentId;
+            document.getElementById('receiptName').innerText = state.name;
+            document.getElementById('receiptSeat').innerText = `${state.currentZone}구역 ${state.selectedSeat}번`;
+
+            showToast("예약이 완료되었습니다!");
+            showSection('ticketPage');
+        }
+    </script>
+</body>
+</html>
